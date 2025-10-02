@@ -1,29 +1,34 @@
+import { siteConfig } from '@/shared/config/Env';
+
 export function Footer() {
   return (
     <footer className="border-t border-[rgb(var(--color-border))]">
-      <div className="app-container py-6 text-sm text-[rgb(var(--color-muted))] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <p>© {new Date().getFullYear()} Isaac Wallace — Portfolio</p>
-        <nav className="flex gap-6">
+      <div className="app-container py-6 flex items-center justify-between text-xs text-muted">
+        <span>
+          © {siteConfig.year} {siteConfig.author} — Portfolio
+        </span>
+
+        <div className="flex items-center gap-4">
           <a
-            className="hover:text-foreground"
-            href="https://github.com/yourname"
+            href={siteConfig.socials.github}
             target="_blank"
             rel="noreferrer"
+            className="hover:text-accent"
           >
             GitHub
           </a>
           <a
-            className="hover:text-foreground"
-            href="https://www.linkedin.com/in/yourname"
+            href={siteConfig.socials.linkedin}
             target="_blank"
             rel="noreferrer"
+            className="hover:text-accent"
           >
             LinkedIn
           </a>
-          <a className="hover:text-foreground" href="/contact">
+          <a href={siteConfig.socials.email} className="hover:text-accent">
             Contact
           </a>
-        </nav>
+        </div>
       </div>
     </footer>
   );

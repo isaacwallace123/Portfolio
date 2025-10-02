@@ -1,0 +1,47 @@
+@reference "../../index.css";
+
+@layer components {
+  .hero {
+    @apply relative flex flex-col items-center justify-center text-center space-y-6 py-20 md:py-32;
+  }
+
+  .hero-kicker {
+    @apply text-sm font-medium tracking-widest uppercase text-brand;
+  }
+
+  .hero-title {
+    @apply text-4xl md:text-6xl font-bold leading-tight;
+  }
+
+  .hero-title .accent {
+    @apply text-brand;
+  }
+
+  .hero-text {
+    @apply max-w-2xl text-muted md:text-lg;
+  }
+
+  .hero-actions {
+    @apply flex gap-4 pt-4;
+  }
+
+  .btn {
+    @apply px-6 py-2 rounded-md font-medium transition;
+  }
+
+  .btn-brand {
+    @apply text-background;
+    background-color: rgb(var(--color-brand));
+  }
+
+  .btn-outline-brand {
+    @apply border;
+    border-color: rgb(var(--color-brand));
+    color: rgb(var(--color-brand));
+  }
+
+  .btn-outline-brand:hover {
+    background-color: rgb(var(--color-brand));
+    color: rgb(var(--color-background));
+  }
+}

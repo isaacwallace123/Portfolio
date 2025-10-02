@@ -1,17 +1,19 @@
 import { App } from '@/components/layout/App';
+import { RoutePaths } from '@/shared/config/Routes';
 import { createBrowserRouter } from 'react-router-dom';
 
 import Home from './pages/home/Home';
 import Projects from './pages/projects/Projects';
 
-export const router = createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path: '/',
+    path: RoutePaths.home,
     element: <App />,
-    //errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'projects', element: <Projects /> },
+      { path: RoutePaths.projects, element: <Projects /> },
     ],
   },
 ]);
+
+export default router;

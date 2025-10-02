@@ -1,0 +1,138 @@
+@layer utilities {
+  @keyframes ui-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ui-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes ui-slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes ui-slide-left {
+    from {
+      opacity: 0;
+      transform: translateX(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes ui-slide-right {
+    from {
+      opacity: 0;
+      transform: translateX(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes ui-zoom-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .anim {
+    opacity: 0;
+    animation-fill-mode: both;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .anim-fade {
+      animation-name: ui-fade-in;
+    }
+    .anim-slide-up {
+      animation-name: ui-slide-up;
+    }
+    .anim-slide-down {
+      animation-name: ui-slide-down;
+    }
+    .anim-slide-left {
+      animation-name: ui-slide-left;
+    }
+    .anim-slide-right {
+      animation-name: ui-slide-right;
+    }
+    .anim-zoom-in {
+      animation-name: ui-zoom-in;
+    }
+  }
+
+  .anim-duration-500 {
+    animation-duration: 0.5s;
+  }
+  .anim-duration-600 {
+    animation-duration: 0.6s;
+  }
+  .anim-duration-700 {
+    animation-duration: 0.7s;
+  }
+  .anim-duration-800 {
+    animation-duration: 0.8s;
+  }
+
+  .anim-delay-100 {
+    animation-delay: 0.1s;
+  }
+  .anim-delay-150 {
+    animation-delay: 0.15s;
+  }
+  .anim-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .anim-delay-300 {
+    animation-delay: 0.3s;
+  }
+  .anim-delay-500 {
+    animation-delay: 0.5s;
+  }
+
+  .anim-ease-out {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim,
+    .anim-fade,
+    .anim-slide-up,
+    .anim-slide-down,
+    .anim-slide-left,
+    .anim-slide-right,
+    .anim-zoom-in {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
