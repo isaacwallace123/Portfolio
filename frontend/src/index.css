@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@plugin "tailwindcss-animate";
+
+@theme {
+  --color-background: 10 10 10;
+  --color-foreground: 235 235 235;
+  --color-muted: 161 161 170;
+  --color-border: 31 31 31;
+
+  --color-accent: 52 211 153;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    background-color: rgb(var(--color-background));
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .app-container {
+    @apply mx-auto w-full max-w-6xl px-6;
+  }
+}
