@@ -1,4 +1,19 @@
-import { FadeIn, SlideUp, Stagger, ZoomIn } from '@/components/animations';
+import {
+  FadeIn,
+  SlideLeft,
+  SlideRight,
+  SlideUp,
+  Stagger,
+  ZoomIn,
+} from '@/components/animations';
+
+import {
+  ConnectionMode,
+  EdgeStyle,
+  LayoutMode,
+  SkillGlobe,
+} from '@/components/ui/globe';
+import SkillsArray from '@/shared/data/Skills.data';
 
 import './home.css';
 
@@ -12,7 +27,7 @@ export default function Home() {
 
       {/* main title */}
       <ZoomIn as="h1" className="hero-title" duration={700} delay={150}>
-        Hi, I’m <span className="accent">Isaac</span>
+        Hello, I’m <span className="text-brand">Isaac</span>
       </ZoomIn>
 
       {/* tagline */}
@@ -32,6 +47,41 @@ export default function Home() {
           </a>
         </SlideUp>
       </Stagger>
+
+      <section className="app-container py-16 grid md:grid-cols-2 gap-10 items-center">
+        <Stagger baseDelay={600} step={100}>
+          <SlideRight duration={700}>
+            <div className="space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-brand">
+                Tech Stack
+              </h2>
+              <p className="text-muted md:text-lg">
+                Each intersection represents a core skill.
+              </p>
+            </div>
+          </SlideRight>
+
+          <SlideLeft duration={700} delay={200}>
+            <SkillGlobe
+              skills={SkillsArray}
+              grid={{ latStep: 30, lonStep: 30, latExtent: 60, radius: 1.6 }}
+              connect={ConnectionMode.Nearest}
+              neighbors={4}
+              showGrid={true}
+              layout={LayoutMode.Uniform}
+              showDots={false}
+              arcLift={0.08}
+              height={460}
+              connectionsColor="#008080"
+              labelFontUrl="/fonts/JetBrainsMono-Bold.ttf"
+              edgeStyle={EdgeStyle.Straight}
+              rotateAuto
+              showIcons={true}
+              showLabels={false}
+            />
+          </SlideLeft>
+        </Stagger>
+      </section>
     </section>
   );
 }
