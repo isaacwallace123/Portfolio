@@ -1,5 +1,5 @@
 import { useEffect, useState, type RefObject } from 'react';
-import type { BaseProps } from './types';
+import type { BaseProps } from '../types';
 
 export function useInView(
   ref: RefObject<Element | null>,

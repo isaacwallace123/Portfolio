@@ -1,6 +1,6 @@
+export type { AnimName, BaseProps, VariantProps } from '../types';
 export { Animation } from './Animation';
 export type { AnimationProps } from './Animation';
-export type { AnimName, BaseProps, VariantProps } from './types';
 
 export { FadeIn } from '../variants/FadeIn';
 export { SlideDown } from '../variants/SlideDown';

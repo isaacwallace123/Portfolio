@@ -5,8 +5,8 @@ import React, {
   type CSSProperties,
   type Ref,
 } from 'react';
-import type { AnimName, VariantProps } from './types';
-import { useInView } from './useInView';
+import { useInView } from '../hooks/useInView';
+import type { AnimName, VariantProps } from '../types';
 
 function joinClassNames(
   ...classList: Array<string | false | null | undefined>

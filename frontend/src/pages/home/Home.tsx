@@ -69,7 +69,7 @@ export default function Home() {
               grid={{ latStep: 30, lonStep: 30, latExtent: 60, radius: 1.6 }}
               connect={ConnectionMode.Nearest}
               neighbors={4}
-              showGrid={true}
+              showGrid={false}
               layout={LayoutMode.Uniform}
               showDots={false}
               arcLift={0.08}
