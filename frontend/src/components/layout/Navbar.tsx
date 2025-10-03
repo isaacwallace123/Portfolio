@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { NavLink } from 'react-router-dom';
 
-import { siteConfig } from '@/shared/config/Env';
+import { site } from '@/config/site';
 import { Routes } from '@/shared/config/Routes';
 
 export function Navbar() {
@@ -9,7 +9,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-[rgb(var(--color-border))] bg-background/80 backdrop-blur">
       <nav className="app-container h-14 flex items-center gap-6">
         <NavLink to="/" className="font-semibold tracking-tight">
-          {siteConfig.name}
+          {site.domain}
         </NavLink>
 
         <div className="ml-auto hidden sm:flex items-center gap-2 text-sm">

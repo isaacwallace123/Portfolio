@@ -1,3 +1,5 @@
+import { avatar, site, socialLinks } from '@/config/site';
+
 import {
   FadeIn,
   SlideLeft,
@@ -33,8 +35,6 @@ import {
 import './home.css';
 
 export default function Home() {
-  const GH = 'isaacwallace123';
-
   return (
     <main className="space-y-24 md:space-y-16">
       {/* Hero */}
@@ -86,13 +86,12 @@ export default function Home() {
               <CardHeader className="pb-4">
                 <Stagger baseDelay={80} step={80}>
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    {/* Left: Avatar + Title */}
                     <div className="flex items-center gap-4">
                       <FadeIn duration={600}>
                         <Avatar
-                          src={`https://github.com/${GH}.png?size=200`}
-                          alt="GitHub avatar"
-                          name="Isaac Wallace"
+                          src={avatar.github(200)}
+                          alt={`${site.name} – GitHub avatar`}
+                          name={site.name}
                           size={80}
                         />
                       </FadeIn>
@@ -106,7 +105,7 @@ export default function Home() {
                           <CardDescription className="mt-1 flex flex-wrap items-center gap-3 text-base text-white/70">
                             <span className="inline-flex items-center gap-2">
                               <MapPin className="h-4 w-4" />
-                              Montréal, QC
+                              {site.location}
                             </span>
                             <span className="inline-flex items-center gap-2">
                               <Terminal className="h-4 w-4" />
@@ -122,7 +121,7 @@ export default function Home() {
                         <Stagger baseDelay={0} step={80}>
                           <FadeIn duration={500}>
                             <Button
-                              to={`https://github.com/${GH}`}
+                              to={socialLinks.github}
                               variant="outline"
                               padY=".55rem"
                               padX="1rem"
@@ -135,7 +134,7 @@ export default function Home() {
 
                           <FadeIn duration={500} delay={40}>
                             <Button
-                              to="https://www.linkedin.com/in/isaac-wallace"
+                              to={socialLinks.linkedin}
                               variant="outline"
                               padY=".55rem"
                               padX="1rem"
@@ -148,7 +147,7 @@ export default function Home() {
 
                           <FadeIn duration={500} delay={80}>
                             <Button
-                              to="https://instagram.com/isaacwallace123"
+                              to={socialLinks.instagram}
                               variant="outline"
                               padY=".55rem"
                               padX="1rem"
@@ -161,7 +160,7 @@ export default function Home() {
 
                           <FadeIn duration={500} delay={120}>
                             <Button
-                              to="mailto:goosewal@gmail.com"
+                              to={`mailto:${site.email}`}
                               variant="solid"
                               padY=".55rem"
                               padX="1rem"
@@ -263,7 +262,7 @@ export default function Home() {
 
       {/* Tech Stack */}
       <section className="app-container grid md:grid-cols-2 gap-10 items-center mx-auto px-4 sm:px-6">
-        <Stagger baseDelay={600} step={100}>
+        <Stagger step={100}>
           <SlideRight duration={700}>
             <div className="space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold text-brand">
