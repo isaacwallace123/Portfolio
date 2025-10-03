@@ -6,6 +6,7 @@ import {
   Stagger,
   ZoomIn,
 } from '@/components/animations';
+import { Button } from '@/components/ui';
 
 import {
   ConnectionMode,
@@ -40,12 +41,29 @@ export default function Home() {
         {/* staggered call-to-actions */}
         <Stagger baseDelay={500} step={120}>
           <SlideUp as="div" className="hero-actions" duration={700}>
-            <a href="/projects" className="btn btn-brand">
+            <Button
+              to="/projects"
+              variant="solid"
+              isDeep
+              padY=".72rem"
+              padX="1.25rem"
+              radius={10}
+              textSize=".95rem"
+            >
               View Projects
-            </a>
-            <a href="/contact" className="btn btn-outline-brand">
+            </Button>
+
+            <Button
+              to="/contact"
+              variant="outline"
+              isDeep
+              padY=".72rem"
+              padX="1.25rem"
+              radius={10}
+              textSize=".95rem"
+            >
               Contact Me
-            </a>
+            </Button>
           </SlideUp>
         </Stagger>
       </section>

@@ -10,6 +10,18 @@
   --color-border: 31 31 31;
 
   --color-brand: 16 185 129;
+  --gradient-brand: linear-gradient(
+    90deg,
+    rgb(52 211 153) 0%,
+    rgb(16 185 129) 50%,
+    rgb(20 184 166) 100%
+  );
+  --gradient-brand-text: linear-gradient(
+    90deg,
+    rgb(52 211 153) 0%,
+    rgb(16 185 129) 50%,
+    rgb(20 184 166) 100%
+  );
 }
 
 @layer base {
@@ -41,5 +53,16 @@
 
   .hover\:text-brand:hover {
     color: rgb(var(--color-brand));
+  }
+
+  .bg-gradient-brand {
+    background: var(--gradient-brand);
+  }
+  .text-gradient-brand {
+    background: var(--gradient-brand-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
 }

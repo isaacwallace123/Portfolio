@@ -1,0 +1,84 @@
+@import '../../../index.css';
+
+.status-root {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 4rem 1.5rem;
+  color: rgb(var(--color-foreground));
+  background: linear-gradient(
+    to bottom,
+    rgb(10 10 10) 0%,
+    rgb(10 10 10) 40%,
+    #000 100%
+  );
+}
+
+.status-wrap {
+  width: 100%;
+  max-width: 40rem;
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  border: 1px solid
+    color-mix(in oklab, rgb(var(--color-brand)) 20%, transparent);
+  background: color-mix(in oklab, rgb(var(--color-brand)) 10%, transparent);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, rgb(var(--color-brand)) 80%, white);
+}
+
+.status-badge .dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, rgb(var(--color-brand)), #ef4444 10%);
+  box-shadow: 0 0 0 0.15rem
+    color-mix(in oklab, rgb(var(--color-brand)) 20%, transparent);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.status-badge .label {
+  color: color-mix(in oklab, rgb(var(--color-brand)) 70%, white);
+}
+.status-badge .code {
+  color: color-mix(in oklab, rgb(var(--color-brand)) 60%, white);
+}
+
+.status-number {
+  margin: 0;
+  font-size: clamp(3.5rem, 10vw, 7.5rem);
+  font-weight: 900;
+  line-height: 1;
+  background: var(--gradient-brand-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.status-message {
+  margin-top: 0.75rem;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: color-mix(in oklab, rgb(var(--color-foreground)) 80%, #888);
+}
+
+.status-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.status-tip {
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  color: color-mix(in oklab, rgb(var(--color-muted)) 85%, #777);
+}

@@ -1,6 +1,6 @@
 import axiosErrorResponseHandler from '@/shared/api/axiosErrorResponseHandler.ts';
-
 import axios, {
+  type AxiosError,
   type AxiosInstance,
   type InternalAxiosRequestConfig,
 } from 'axios';
@@ -20,15 +20,13 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_URL,
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
   });
 
   instance.interceptors.request.use(
     (config: CustomAxiosRequestConfig) => {
       const useV2 = config.useV2 !== undefined ? config.useV2 : true;
-      const versionPath = useV2 ? '/v2/gateway' : '/gateway';
+      const versionPath = useV2 ? '/v2/gateway' : '/v1/gateway';
 
       if (
         config.url &&
@@ -37,35 +35,31 @@ const createAxiosInstance = (): AxiosInstance => {
       ) {
         config.url = versionPath + config.url;
       }
-
       delete config.useV2;
-
       return config;
     },
-    error => {
-      return Promise.reject(error);
-    }
+    error => Promise.reject(error)
   );
 
   instance.interceptors.response.use(
     response => response,
-    error => {
-      handleAxiosError(error);
-      return Promise.reject(error);
+    (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const statusCode = error.response?.status ?? 0;
+
+        const mapped = axiosErrorResponseHandler(
+          error as AxiosError,
+          statusCode
+        );
+
+        return Promise.reject(mapped);
+      }
+
+      return Promise.reject(new Error('Unexpected error object'));
     }
   );
 
   return instance;
-};
-
-const handleAxiosError = (error: unknown): void => {
-  if (axios.isAxiosError(error)) {
-    const statusCode = error.response?.status ?? 0;
-
-    axiosErrorResponseHandler(error, statusCode);
-  } else {
-    console.error('An unexpected error occurred:', error);
-  }
 };
 
 const axiosInstance = createAxiosInstance();
