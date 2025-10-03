@@ -78,7 +78,7 @@ type Props = {
 
 export default function SkillGridGlobe({
   skills,
-  grid,
+  grid = { latStep: 30, lonStep: 30, latExtent: 60, radius: 1.6 },
   height = 460,
   className,
   rotateAuto = false,
@@ -88,7 +88,7 @@ export default function SkillGridGlobe({
 
   showGrid = false,
   arcLift = 0.08,
-  edgeStyle = EdgeStyle.Arc,
+  edgeStyle = EdgeStyle.Straight,
 
   lineColor = '#3b82f6',
   connectionsColor,
