@@ -19,36 +19,38 @@ import './home.css';
 
 export default function Home() {
   return (
-    <section className="hero">
-      {/* kicker */}
-      <FadeIn as="p" className="hero-kicker text-brand" duration={700}>
-        Welcome
-      </FadeIn>
+    <main className="space-y-24 md:space-y-16">
+      <section className="hero">
+        {/* kicker */}
+        <FadeIn as="p" className="hero-kicker text-brand" duration={700}>
+          Welcome
+        </FadeIn>
 
-      {/* main title */}
-      <ZoomIn as="h1" className="hero-title" duration={700} delay={150}>
-        Hello, I’m <span className="text-brand">Isaac</span>
-      </ZoomIn>
+        {/* main title */}
+        <ZoomIn as="h1" className="hero-title" duration={700} delay={150}>
+          Hello, I’m <span className="text-brand">Isaac</span>
+        </ZoomIn>
 
-      {/* tagline */}
-      <SlideUp as="p" className="hero-text" duration={700} delay={300}>
-        I build clean systems and modern web apps. Explore my projects and live
-        infrastructure metrics.
-      </SlideUp>
-
-      {/* staggered call-to-actions */}
-      <Stagger baseDelay={500} step={120}>
-        <SlideUp as="div" className="hero-actions" duration={700}>
-          <a href="/projects" className="btn btn-brand">
-            View Projects
-          </a>
-          <a href="/contact" className="btn btn-outline-brand">
-            Contact Me
-          </a>
+        {/* tagline */}
+        <SlideUp as="p" className="hero-text" duration={700} delay={300}>
+          I build clean systems and modern web apps. Explore my projects and
+          live infrastructure metrics.
         </SlideUp>
-      </Stagger>
 
-      <section className="app-container py-16 grid md:grid-cols-2 gap-10 items-center">
+        {/* staggered call-to-actions */}
+        <Stagger baseDelay={500} step={120}>
+          <SlideUp as="div" className="hero-actions" duration={700}>
+            <a href="/projects" className="btn btn-brand">
+              View Projects
+            </a>
+            <a href="/contact" className="btn btn-outline-brand">
+              Contact Me
+            </a>
+          </SlideUp>
+        </Stagger>
+      </section>
+
+      <section className="app-container grid md:grid-cols-2 gap-10 items-center mx-auto px-4 sm:px-6">
         <Stagger baseDelay={600} step={100}>
           <SlideRight duration={700}>
             <div className="space-y-4">
@@ -82,6 +84,6 @@ export default function Home() {
           </SlideLeft>
         </Stagger>
       </section>
-    </section>
+    </main>
   );
 }

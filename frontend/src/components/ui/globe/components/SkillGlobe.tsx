@@ -1,13 +1,17 @@
 import { OrbitControls, TrackballControls } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber';
-import React, { Suspense, useRef } from 'react';
-import type { Group } from 'three';
+import { Canvas } from '@react-three/fiber';
+import { Suspense, useMemo } from 'react';
 
+import Connections from './Connections';
+import DotLabel from './DotLabel';
 import IconBillboard from './IconBillboard';
+import WireGrid from './WireGrid';
+import AutoRotateGroup from '../core/AutoRotateGroup';
 
-import { useGrid } from '../hooks/useGrid';
-import { useSkillPoints } from '../hooks/useSkillPoints';
-import { useUniformPoints } from '../hooks/useUniformPoints';
+import { useContainerSize } from '../hooks/useContainerSize';
+import { useGlobeData } from '../hooks/useGlobeData';
+import { useGlobeResponsive } from '../hooks/useGlobeResponsive';
+
 import {
   ConnectionMode,
   EdgeStyle,
@@ -16,11 +20,8 @@ import {
   type SkillItem,
   type SkillPoint,
 } from '../types';
-import { cameraDistanceForSphere, suggestedNearFar } from '../utils/camera';
+import { distanceForSphereFit, suggestedNearFar } from '../utils/camera';
 import { readCssRgbVarToHex } from '../utils/color';
-import Connections from './Connections';
-import DotLabel from './DotLabel';
-import WireGrid from './WireGrid';
 
 type Props = {
   skills: SkillItem[];
@@ -28,46 +29,44 @@ type Props = {
   height?: number;
   className?: string;
   rotateAuto?: boolean;
+
   connect?: ConnectionMode;
   neighbors?: number;
+
   showGrid?: boolean;
   arcLift?: number;
+  edgeStyle?: EdgeStyle;
+
+  // visuals
   lineColor?: string;
-  labelFontUrl?: string;
-  lineOpacity?: number;
-  dotRadius?: number;
-  fontSize?: number;
-  radiusScale?: number;
-  cameraPadding?: number;
-  layout?: LayoutMode;
-  showDots?: boolean;
   connectionsColor?: string;
   connectionsColorVar?: string;
-  getConnectionColor?: (a: SkillPoint, b: SkillPoint) => string;
-  edgeStyle?: EdgeStyle;
+  lineOpacity?: number;
+
+  // labels / dots
+  labelFontUrl?: string;
+  dotRadius?: number;
+  fontSize?: number;
+  showDots?: boolean;
+  showLabels?: boolean;
+
+  // layout / camera
+  layout?: LayoutMode;
+  radiusScale?: number;
+  cameraPadding?: number;
+
+  // interaction
   freeSpin?: boolean;
+
+  // icons
   showIcons?: boolean;
   iconSize?: number;
   iconOffset?: number;
-  showLabels?: boolean;
   dimLabelWhenIcon?: boolean;
-};
 
-function AutoRotateGroup({
-  enabled,
-  speed = 0.6,
-  children,
-}: {
-  enabled: boolean;
-  speed?: number;
-  children: React.ReactNode;
-}) {
-  const ref = useRef<Group | null>(null);
-  useFrame((_, dt) => {
-    if (enabled && ref.current) ref.current.rotation.y += speed * dt;
-  });
-  return <group ref={ref}>{children}</group>;
-}
+  // dynamic color fn
+  getConnectionColor?: (a: SkillPoint, b: SkillPoint) => string;
+};
 
 export default function SkillGridGlobe({
   skills,
@@ -75,73 +74,111 @@ export default function SkillGridGlobe({
   height = 460,
   className,
   rotateAuto = false,
+
   connect = ConnectionMode.Nearest,
   neighbors = 4,
+
   showGrid = false,
   arcLift = 0.08,
+  edgeStyle = EdgeStyle.Arc,
+
   lineColor = '#3b82f6',
-  labelFontUrl,
-  lineOpacity = 0.35,
-  dotRadius = 0.03,
-  fontSize = 0.1,
-  radiusScale = 0.92,
-  cameraPadding = 1.18,
-  layout = LayoutMode.Uniform,
-  showDots = true,
   connectionsColor,
   connectionsColorVar,
-  getConnectionColor,
-  edgeStyle = EdgeStyle.Arc,
+  lineOpacity = 0.35,
+
+  labelFontUrl,
+  dotRadius = 0.03,
+  fontSize = 0.1,
+  showDots = true,
+  showLabels = true,
+
+  layout = LayoutMode.Uniform,
+  radiusScale = 0.92,
+  cameraPadding = 1.225,
+
   freeSpin = false,
+
   showIcons = false,
   iconSize = 0.22,
   iconOffset = 0.16,
-  showLabels = true,
   dimLabelWhenIcon = true,
+
+  getConnectionColor,
 }: Props) {
+  const R = useGlobeResponsive({
+    height,
+    radiusScale,
+    cameraPadding,
+    iconSize,
+    iconOffset,
+    fontSize,
+    dotRadius,
+    neighbors,
+    lineOpacity,
+  });
+
+  const { ref: wrapRef, width: wrapW } = useContainerSize<HTMLDivElement>();
+
+  const maxW = R.isMobile ? '92vw' : 'min(92vw, 740px)';
+  const mHeight = R.height;
+  const aspect = useMemo(
+    () => Math.max(0.5, wrapW / mHeight),
+    [wrapW, mHeight]
+  );
+
   const connColor = connectionsColorVar
     ? readCssRgbVarToHex(connectionsColorVar, connectionsColor ?? lineColor)
     : (connectionsColor ?? lineColor);
 
   const baseRadius = grid?.radius ?? 1.6;
-  const radius = baseRadius * radiusScale;
+  const radius = baseRadius * R.radiusScale;
 
   const latStep = grid?.latStep ?? 30;
   const lonStep = grid?.lonStep ?? 30;
   const latExtent = grid?.latExtent ?? 60;
 
+  const { skillPoints, occupied, latCount, lonCount } = useGlobeData({
+    layout,
+    latExtent,
+    latStep,
+    lonStep,
+    radius,
+    skills,
+  });
+  
   const fov = 45;
-  const distance = cameraDistanceForSphere(
-    radius + arcLift,
-    fov,
-    cameraPadding
-  );
+  
+  const distance = distanceForSphereFit({
+    radius: radius + arcLift,
+    fovDeg: fov,
+    aspect,
+    padding: R.cameraPadding,
+  });
+
   const { near, far } = suggestedNearFar(radius + arcLift, distance);
 
-  const gridData = useGrid(latExtent, latStep, lonStep, radius);
-  const gridMapped = useSkillPoints(gridData.gridPoints, skills);
-  const uniform = useUniformPoints(skills, radius);
-
-  const isGridLayout = layout === LayoutMode.Grid;
-  const skillPoints = isGridLayout
-    ? gridMapped.skillPoints
-    : uniform.skillPoints;
-  const occupied = isGridLayout ? gridMapped.occupied : undefined;
-  const latCount = isGridLayout ? gridData.latCount : 0;
-  const lonCount = isGridLayout ? gridData.lonCount : 0;
-
   return (
-    <div className={className} style={{ height }}>
+    <div
+      ref={wrapRef}
+      className={className}
+      style={{
+        height: mHeight,
+        width: '100%',
+        maxWidth: maxW as string,
+        marginInline: 'auto',
+      }}
+    >
       <Canvas
         camera={{ position: [0, 0, distance], fov, near, far }}
-        dpr={[1, 2]}
+        dpr={R.dpr}
       >
         <ambientLight intensity={0.7} />
         <directionalLight position={[3, 5, 2]} intensity={0.9} />
 
         <AutoRotateGroup enabled={freeSpin && rotateAuto} speed={0.6}>
           <Suspense fallback={null}>
-            {showGrid && isGridLayout && (
+            {showGrid && layout === LayoutMode.Grid && (
               <WireGrid
                 radius={radius}
                 latStep={latStep}
@@ -161,8 +198,8 @@ export default function SkillGridGlobe({
                       <IconBillboard
                         position={pos}
                         url={iconUrl!}
-                        size={iconSize}
-                        offset={iconOffset}
+                        size={R.iconSize}
+                        offset={R.iconOffset}
                         opacity={1}
                       />
                     )}
@@ -172,15 +209,15 @@ export default function SkillGridGlobe({
                         position={pos}
                         label={skill.label}
                         color={skill.color}
-                        dotRadius={hasIcon ? 0 : dotRadius}
+                        dotRadius={hasIcon ? 0 : R.dotRadius}
                         fontSize={
                           hasIcon && dimLabelWhenIcon
-                            ? fontSize * 0.9
-                            : fontSize
+                            ? R.fontSize * 0.9
+                            : R.fontSize
                         }
                         showDot={showDots && !hasIcon}
                         fontUrl={labelFontUrl}
-                        radialOffset={hasIcon ? iconOffset + 0.03 : 0}
+                        radialOffset={hasIcon ? R.iconOffset + 0.03 : 0}
                       />
                     )}
                   </group>
@@ -195,10 +232,10 @@ export default function SkillGridGlobe({
               lonCount={lonCount}
               radius={radius}
               mode={connect}
-              neighbors={neighbors}
+              neighbors={R.neighbors}
               arcLift={arcLift}
               lineColor={connColor}
-              lineOpacity={lineOpacity}
+              lineOpacity={R.lineOpacity}
               colorFn={getConnectionColor}
               edgeStyle={edgeStyle}
             />
@@ -210,7 +247,7 @@ export default function SkillGridGlobe({
             makeDefault
             noZoom
             noPan
-            rotateSpeed={0.85}
+            rotateSpeed={R.isMobile ? 0.65 : 0.85}
             dynamicDampingFactor={0.15}
             staticMoving={false}
           />
