@@ -2,16 +2,20 @@ import { OrbitControls, TrackballControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useMemo } from 'react';
 
-import Connections from './Connections';
-import DotLabel from './DotLabel';
-import IconBillboard from './IconBillboard';
-import WireGrid from './WireGrid';
 import AutoRotateGroup from '../core/AutoRotateGroup';
+
+import IconBillboard from './billboards/IconBillboard';
+import LabelBillboard from './billboards/LabelBillboard';
+
+import Connections from './Connections';
+//import DotLabel from './DotLabel';
+import WireGrid from './WireGrid';
 
 import { useContainerSize } from '../hooks/useContainerSize';
 import { useGlobeData } from '../hooks/useGlobeData';
 import { useGlobeResponsive } from '../hooks/useGlobeResponsive';
 
+import DotBillboard from '@/components/ui/globe/components/billboards/DotBillboard';
 import {
   ConnectionMode,
   EdgeStyle,
@@ -64,7 +68,11 @@ type Props = {
   iconOffset?: number;
   dimLabelWhenIcon?: boolean;
 
-  // dynamic color fn
+  depthFadeIcons?: boolean;
+  depthFadeLabels?: boolean;
+  depthFadeMinOpacity?: number;
+  depthFadeExponent?: number;
+
   getConnectionColor?: (a: SkillPoint, b: SkillPoint) => string;
 };
 
@@ -90,8 +98,8 @@ export default function SkillGridGlobe({
   labelFontUrl,
   dotRadius = 0.03,
   fontSize = 0.1,
-  showDots = true,
-  showLabels = true,
+  showDots = false,
+  showLabels = false,
 
   layout = LayoutMode.Uniform,
   radiusScale = 0.92,
@@ -103,6 +111,11 @@ export default function SkillGridGlobe({
   iconSize = 0.22,
   iconOffset = 0.16,
   dimLabelWhenIcon = true,
+
+  depthFadeIcons = false,
+  depthFadeLabels = false,
+  depthFadeMinOpacity = 0.28,
+  depthFadeExponent = 1.25,
 
   getConnectionColor,
 }: Props) {
@@ -146,9 +159,9 @@ export default function SkillGridGlobe({
     radius,
     skills,
   });
-  
+
   const fov = 45;
-  
+
   const distance = distanceForSphereFit({
     radius: radius + arcLift,
     fovDeg: fov,
@@ -201,23 +214,50 @@ export default function SkillGridGlobe({
                         size={R.iconSize}
                         offset={R.iconOffset}
                         opacity={1}
+                        depthFade={depthFadeIcons}
+                        minOpacity={depthFadeMinOpacity}
+                        fadeExponent={depthFadeExponent}
                       />
                     )}
 
-                    {showLabels && (
-                      <DotLabel
+                    {/* DOT */}
+                    {showDots && !hasIcon && R.dotRadius > 0 && (
+                      <DotBillboard
                         position={pos}
-                        label={skill.label}
                         color={skill.color}
-                        dotRadius={hasIcon ? 0 : R.dotRadius}
+                        radius={R.dotRadius}
+                        radialOffset={hasIcon ? R.iconOffset + 0.03 : 0}
+                        localOffset={[
+                          -(
+                            (hasIcon && dimLabelWhenIcon
+                              ? R.fontSize * 0.9
+                              : R.fontSize) * 0.4
+                          ),
+                          0,
+                          0,
+                        ]}
+                        depthFade={depthFadeLabels}
+                        minOpacity={depthFadeMinOpacity}
+                        fadeExponent={depthFadeExponent}
+                      />
+                    )}
+
+                    {/* LABEL */}
+                    {showLabels && (
+                      <LabelBillboard
+                        position={pos}
+                        text={skill.label}
+                        color={skill.color}
                         fontSize={
                           hasIcon && dimLabelWhenIcon
                             ? R.fontSize * 0.9
                             : R.fontSize
                         }
-                        showDot={showDots && !hasIcon}
                         fontUrl={labelFontUrl}
-                        radialOffset={hasIcon ? R.iconOffset + 0.03 : 0}
+                        radialOffset={hasIcon ? R.iconOffset + 0.1 : 0}
+                        depthFade={depthFadeLabels}
+                        minOpacity={depthFadeMinOpacity}
+                        fadeExponent={depthFadeExponent}
                       />
                     )}
                   </group>

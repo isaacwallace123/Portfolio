@@ -6,14 +6,14 @@ import {
   Stagger,
   ZoomIn,
 } from '@/components/animations';
-import { Button } from '@/components/ui';
 
 import {
+  Button,
   ConnectionMode,
   EdgeStyle,
   LayoutMode,
   SkillGlobe,
-} from '@/components/ui/globe';
+} from '@/components/ui';
 import SkillsArray from '@/shared/data/Skills.data';
 
 import './home.css';
@@ -87,17 +87,15 @@ export default function Home() {
               grid={{ latStep: 30, lonStep: 30, latExtent: 60, radius: 1.6 }}
               connect={ConnectionMode.Nearest}
               neighbors={4}
-              showGrid={false}
               layout={LayoutMode.Uniform}
-              showDots={false}
               arcLift={0.08}
               height={460}
               connectionsColor="#008080"
               labelFontUrl="/fonts/JetBrainsMono-Bold.ttf"
               edgeStyle={EdgeStyle.Straight}
               rotateAuto
-              showIcons={true}
-              showLabels={false}
+              showIcons
+              depthFadeIcons
             />
           </SlideLeft>
         </Stagger>

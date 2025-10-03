@@ -1,6 +1,7 @@
 import { Billboard, Image } from '@react-three/drei';
-import React from 'react';
-import { Vector3 } from 'three';
+import { useMemo, useRef } from 'react';
+import { Mesh, Vector3 } from 'three';
+import { useDepthFade } from '../../hooks/useDepthFade';
 
 type IconBillboardProps = {
   position: [number, number, number];
@@ -9,6 +10,10 @@ type IconBillboardProps = {
   offset?: number;
   opacity?: number;
   alwaysOnTop?: boolean;
+
+  depthFade?: boolean;
+  minOpacity?: number;
+  fadeExponent?: number;
 };
 
 export default function IconBillboard({
@@ -18,8 +23,12 @@ export default function IconBillboard({
   offset = 0.16,
   opacity = 1,
   alwaysOnTop = false,
+
+  depthFade = false,
+  minOpacity = 0.25,
+  fadeExponent = 1.25,
 }: IconBillboardProps) {
-  const worldPos = React.useMemo(() => {
+  const worldPos = useMemo<[number, number, number]>(() => {
     const base = new Vector3(...position);
     return base
       .clone()
@@ -27,14 +36,24 @@ export default function IconBillboard({
       .toArray() as [number, number, number];
   }, [position, offset]);
 
+  const meshRef = useRef<Mesh | null>(null);
+
+  useDepthFade(meshRef, {
+    enabled: depthFade,
+    minOpacity,
+    exponent: fadeExponent,
+    baseOpacity: opacity,
+  });
+
   return (
     <Billboard follow position={worldPos}>
       <Image
+        ref={meshRef}
         url={url}
         scale={[size, size]}
+        toneMapped={false}
         transparent
         opacity={opacity}
-        toneMapped={false}
         renderOrder={alwaysOnTop ? 999 : 0}
         {...(alwaysOnTop
           ? { 'material-transparent': true, 'material-depthTest': false }
