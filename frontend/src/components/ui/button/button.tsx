@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Button.css';
+import './button.css';
 
 type Size = 'sm' | 'md' | 'lg';
 type Variant = 'solid' | 'outline' | 'ghost' | 'gradient' | 'glass';

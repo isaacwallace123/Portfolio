@@ -30,9 +30,55 @@ import {
   Mail,
   MapPin,
   Terminal,
+  ExternalLink,
+  Activity,
+  Clock3,
+  Cpu
 } from 'lucide-react';
 
-import './home.css';
+import './Home.css';
+
+const items = [
+  { label: "Uptime (30d)", value: "99.97%", icon: Activity },
+  { label: "API P95", value: "182 ms", icon: Clock3 },
+  { label: "Host CPU", value: "23%", icon: Cpu },
+];
+
+type Project = {
+  title: string;
+  blurb: string;
+  image: string;
+  tags: string[];
+  live?: string;
+  repo?: string;
+};
+
+const projects: Project[] = [
+  {
+    title: "Kleff Hosting Platform",
+    blurb: "Modular API-driven server deployment with Docker, metrics, and CI/CD.",
+    image: "/images/projects/kleff.jpg",
+    tags: ["Go", "Docker", "API", "CI/CD"],
+    live: "/projects/kleff",
+    repo: "https://github.com/isaacwallace123/kleff",
+  },
+  {
+    title: "GoWeb",
+    blurb: "Modular Go library to modernize and simulate Springboot practices with GoLang.",
+    image: "/images/projects/portfolio.jpg",
+    tags: ["Go", "Restful", "API", "WebServices", "Http"],
+    live: "/projects/portfolio",
+    repo: "https://github.com/isaacwallace123/GoWeb",
+  },
+  {
+    title: "Wall-Y V2",
+    blurb: "Full-stack discord bot with easy expansion, modern commands, and fluid infrastructure.",
+    image: "/images/projects/wallybot.jpg",
+    tags: ["Linux", "Docker", "Grafana", "Prometheus"],
+    live: "/projects/wallybot",
+    repo: "https://github.com/isaacwallace123/WallY-V2"
+  },
+];
 
 export default function Home() {
   return (
@@ -284,6 +330,79 @@ export default function Home() {
               depthFadeIcons
             />
           </SlideLeft>
+        </Stagger>
+      </section>
+
+      <section className="app-container mx-auto px-4 sm:px-6">
+      <div className="mb-8">
+        <SlideUp duration={650}>
+          <h2 className="text-3xl md:text-4xl font-bold text-brand">Featured Projects</h2>
+        </SlideUp>
+        <FadeIn duration={600} delay={40}>
+          <p className="text-muted md:text-lg">Selected work with short descriptions and links.</p>
+        </FadeIn>
+      </div>
+
+      <Stagger baseDelay={80} step={90}>
+        <div className="grid gap-6 md:grid-cols-3">
+          {projects.map((p) => (
+            <SlideUp key={p.title} duration={650}>
+              <Card className="overflow-hidden border border-white/10 group">
+                <img src={p.image} alt={p.title} className="h-40 w-full object-cover" loading="lazy" />
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl">{p.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-white/80 leading-relaxed">{p.blurb}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {p.tags.map(tag => (<Badge key={tag}>{tag}</Badge>))}
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    {p.live && (
+                      <Button to={p.live} variant="solid">
+                        <ExternalLink className="mr-2 h-4 w-4" /> Live
+                      </Button>
+                    )}
+                    {p.repo && (
+                      <Button to={p.repo} variant="outline">
+                        <Github className="mr-2 h-4 w-4" /> Repo
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </SlideUp>
+          ))}
+        </div>
+      </Stagger>
+    </section>
+
+      <section className="app-container mx-auto px-4 sm:px-6">
+        <div className="mb-6 flex items-end justify-between">
+          <SlideUp duration={650}>
+            <h2 className="text-3xl md:text-4xl font-bold text-brand">Live Metrics</h2>
+          </SlideUp>
+          <FadeIn duration={500} delay={40}>
+            <Button to="/metrics" variant="outline">View Dashboard</Button>
+          </FadeIn>
+        </div>
+
+        <Stagger baseDelay={200} step={90}>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {items.map(({ label, value, icon: Icon }) => (
+              <SlideUp key={label} duration={600}>
+                <Card className="border border-white/10">
+                  <CardContent className="flex items-center justify-between py-5">
+                    <div className="space-y-1">
+                      <p className="text-sm text-white/60">{label}</p>
+                      <p className="text-2xl font-semibold">{value}</p>
+                    </div>
+                    <Icon className="h-6 w-6 opacity-80" />
+                  </CardContent>
+                </Card>
+              </SlideUp>
+            ))}
+          </div>
         </Stagger>
       </section>
     </main>
