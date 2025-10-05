@@ -1,0 +1,35 @@
+prometheus:
+  base_url: ${PROMETHEUS_BASE_URL}
+
+docker:
+  host: ${DOCKER_HOST}
+
+proxmox:
+  base_url: ${PROXMOX_BASE_URL}
+  token_id: ${PROXMOX_TOKEN_ID}
+  token_secret: ${PROXMOX_TOKEN_SECRET}
+  insecure_tls: true
+  node_name: "pve"
+
+inventory:
+  ingress:
+    id: ingress-npm
+    name: Nginx Proxy Manager
+    ip: ${INGRESS_IP_ADDRESS}
+  servers:
+    - id: unraid
+      name: Unraid
+      ip: ${UNRAID_IP_ADDRESS}
+      exporter_job: node
+      containers:
+        - ref: docker://Grafana
+        - ref: docker://prometheus
+        - ref: docker://blackbox
+    - id: proxmox
+      name: Proxmox
+      ip: ${PROXMOX_IP_ADDRESS}
+      exporter_job: node
+      containers:
+        - ref: lxc://100
+
+api_key: "changeme"
