@@ -37,10 +37,13 @@ services:
     image: ghcr.io/isaacwallace123/portfolio-frontend:latest
     restart: unless-stopped
     networks: [web]
+    build:
+      context: .
+      args:
+        VITE_BACKEND_URL: ${VITE_BACKEND_URL}
     expose:
       - "3000"
     environment:
-      VITE_BACKEND_URL: ${VITE_BACKEND_URL}
       PORT: 3000
     depends_on:
       - portfolio-backend
