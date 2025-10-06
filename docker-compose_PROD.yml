@@ -32,7 +32,6 @@ services:
       retries: 6
       start_period: 25s
 
-
   portfolio-frontend:
     container_name: portfolio-frontend
     image: ghcr.io/isaacwallace123/portfolio-frontend:latest
@@ -41,8 +40,8 @@ services:
     expose:
       - "3000"
     environment:
-      - BACKEND_URL=http://portfolio-backend:8080
-      - PORT=3000
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+      PORT: 3000
     depends_on:
       - portfolio-backend
     healthcheck:

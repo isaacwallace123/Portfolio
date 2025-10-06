@@ -1,4 +1,5 @@
 import axiosErrorResponseHandler from '@/shared/api/axiosErrorResponseHandler.ts';
+
 import axios, {
   type AxiosError,
   type AxiosInstance,
@@ -18,14 +19,38 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const createAxiosInstance = (): AxiosInstance => {
+  const raw = import.meta.env.VITE_BACKEND_URL?.trim();
+  if (!raw) {
+    throw new Error(
+      '[CONFIG] VITE_BACKEND_URL is missing. Set it at build time (e.g. https://api.isaacwallace.dev).'
+    );
+  }
+
+  const baseURL = raw.replace(/\/+$/, '');
+
+  try {
+    const u = new URL(baseURL);
+    if (u.pathname && u.pathname !== '/' && u.pathname !== '') {
+      throw new Error(
+        `[CONFIG] VITE_BACKEND_URL must not include a path. Use origin only (e.g. https://api.isaacwallace.dev), not "${baseURL}".`
+      );
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    throw new Error(
+      `[CONFIG] VITE_BACKEND_URL is not a valid absolute URL: "${raw}"`
+    );
+  }
+
   const instance = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL,
+    baseURL,
     headers: { 'Content-Type': 'application/json' },
   });
 
   instance.interceptors.request.use(
     (config: CustomAxiosRequestConfig) => {
-      const useV2 = config.useV2 !== undefined ? config.useV2 : false;
+      const useV2 = config.useV2 ?? false;
+
       const versionPath = useV2 ? '/api/v2' : '/api/v1';
 
       if (
@@ -33,9 +58,13 @@ const createAxiosInstance = (): AxiosInstance => {
         !config.url.startsWith('http://') &&
         !config.url.startsWith('https://')
       ) {
-        config.url = versionPath + config.url;
+        const rel = config.url.startsWith('/') ? config.url : `/${config.url}`;
+
+        config.url = versionPath + rel;
       }
+
       delete config.useV2;
+
       return config;
     },
     error => Promise.reject(error)
@@ -43,6 +72,7 @@ const createAxiosInstance = (): AxiosInstance => {
 
   instance.interceptors.response.use(
     response => response,
+
     (error: unknown) => {
       if (axios.isAxiosError(error)) {
         const statusCode = error.response?.status ?? 0;
@@ -63,5 +93,4 @@ const createAxiosInstance = (): AxiosInstance => {
 };
 
 const axiosInstance = createAxiosInstance();
-
 export default axiosInstance;
