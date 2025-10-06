@@ -1,0 +1,71 @@
+.shad-ts {
+  --ts-brand: rgb(var(--color-brand));
+  --ts-subtle: rgba(255, 255, 255, 0.62);
+  --ts-grid: rgba(255, 255, 255, 0.05);
+  --ts-border: rgba(255, 255, 255, 0.08);
+  --ts-tooltip: rgba(17, 17, 18, 0.98);
+  --ts-color-1: var(--ts-brand);
+  --ts-color-2: #a78bfa;
+  --ts-color-3: #34d399;
+  --ts-color-4: #f59e0b;
+}
+
+.shad-ts {
+  background: rgb(22, 22, 22);
+  border: 1px solid var(--ts-border);
+  border-radius: 1rem;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease;
+}
+
+.shad-ts:hover {
+  border-color: color-mix(in oklab, var(--ts-brand) 30%, transparent);
+}
+
+.shad-ts .recharts-wrapper {
+  border: none;
+  border-radius: 0;
+  padding-bottom: 6px;
+}
+
+.shad-ts .recharts-cartesian-grid-horizontal line,
+.shad-ts .recharts-cartesian-grid-vertical line {
+  stroke: var(--ts-grid);
+  stroke-opacity: 0.5;
+}
+
+.shad-ts .recharts-cartesian-axis-tick text {
+  font-size: 0.75rem;
+  fill: var(--ts-subtle);
+}
+
+.shad-ts .recharts-xAxis {
+  transform: translateY(6px);
+}
+
+.shad-ts .recharts-yAxis {
+  transform: translateX(-2px);
+}
+
+.shad-ts .recharts-tooltip-wrapper {
+  border-radius: 0.5rem;
+}
+
+.shad-ts .recharts-default-legend {
+  color: var(--ts-subtle);
+  font-size: 0.8rem;
+  margin-top: -2px;
+}
+
+.shad-ts .recharts-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.shad-ts .recharts-legend-item text {
+  fill: var(--ts-subtle);
+}

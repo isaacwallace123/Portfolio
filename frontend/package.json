@@ -26,13 +26,16 @@
     "lucide-react": "^0.544.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-is": "^19.2.0",
     "react-router-dom": "^7.9.3",
+    "recharts": "^3.2.1",
     "shadcn": "^3.3.1",
     "simple-icons": "^15.16.0",
     "tailwind-merge": "^3.3.1",
     "tailwind-variants": "^3.1.1",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.180.0"
+    "three": "^0.180.0",
+    "uplot": "^1.6.32"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -40,6 +43,7 @@
     "@types/node": "^24.6.2",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
+    "@types/react-is": "^19.2.0",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",

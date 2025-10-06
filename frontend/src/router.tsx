@@ -3,10 +3,12 @@ import { createBrowserRouter } from 'react-router-dom';
 import { App } from '@/components/layout/App';
 
 import { RoutePaths } from '@/shared/config/Routes';
+
 import ErrorBoundary from '@/shared/errors/ErrorBoundary';
 
+import Metrics from '@/pages/metrics/Metrics';
 import Home from './pages/home/Home';
-import Projects from './pages/projects/Projects';
+//import Projects from './pages/projects/Projects';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +17,8 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       { index: true, element: <Home /> },
-      { path: RoutePaths.projects, element: <Projects /> },
+     // { path: RoutePaths.projects, element: <Projects /> },
+      { path: RoutePaths.metrics, element: <Metrics /> },
     ],
   },
 ]);

@@ -44,4 +44,24 @@ export interface MetricsStreamEvent {
   value: number;
 }
 
-export type MetricsStatus = 'connecting' | 'live' | 'polling' | 'error';
+export type MetricsStatus =
+  | 'idle'
+  | 'connecting'
+  | 'live'
+  | 'reconnecting'
+  | 'closed'
+  | 'error';
+
+export interface HistoryQuery {
+  from: number;
+  to: number;
+  servers?: string[];
+  metrics?: MetricKey[];
+}
+
+export type HistorySeries = Record<
+  string,
+  Partial<Record<MetricKey, SeriesPoint[]>>
+>;
+
+export type SeriesKey = `${string}:${MetricKey}`;

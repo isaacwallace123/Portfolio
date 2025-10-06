@@ -33,10 +33,10 @@ func main() {
 
 	handler := httputil.LoggingMiddleware(
 		httputil.CORSMiddleware(httputil.CORSConfig{
-			AllowedOrigins:   []string{"http://localhost:5173", "http://localhost:3000"},
-			AllowedMethods:   []string{"GET"},
-			AllowedHeaders:   []string{"Content-Type", "Authorization"},
-			AllowCredentials: true,
+			AllowedOrigins:   []string{"http://localhost:5173"},
+			AllowedMethods:   []string{"GET", "OPTIONS"},
+			AllowedHeaders:   []string{"Content-Type"},
+			AllowCredentials: false,
 		})(mux),
 	)
 

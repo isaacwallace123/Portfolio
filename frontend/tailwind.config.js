@@ -9,6 +9,7 @@ export default {
     extend: {
       colors: {
         background: 'rgb(var(--color-background))',
+        brand: 'rgb(var(--color-brand))',
         foreground: 'rgb(var(--color-foreground))',
         muted: 'rgb(var(--color-muted))',
         border: 'rgb(var(--color-border))',

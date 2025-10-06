@@ -5,7 +5,7 @@ import axios, {
   type InternalAxiosRequestConfig,
 } from 'axios';
 
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = false;
 
 declare module 'axios' {
   export interface AxiosRequestConfig {

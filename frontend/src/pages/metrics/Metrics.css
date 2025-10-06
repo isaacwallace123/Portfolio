@@ -1,0 +1,56 @@
+.metrics-page {
+  padding: 2rem 0;
+}
+
+.metrics-header {
+  margin-bottom: 2rem;
+}
+
+.metrics-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(var(--color-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.metrics-subtitle {
+  color: rgb(var(--color-muted));
+  font-size: 1rem;
+}
+
+.metrics-charts {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.metrics-range {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.metrics-range-label {
+  color: rgb(var(--color-muted));
+  font-size: 0.9rem;
+}
+
+.metrics-range-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.range-btn {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.5rem;
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  font-size: 0.85rem;
+}
+
+.range-btn.active {
+  border-color: color-mix(in oklab, rgb(var(--color-brand)) 40%, transparent);
+  background: color-mix(in oklab, rgb(var(--color-brand)) 12%, transparent);
+}
