@@ -55,4 +55,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Portainer webhook
-        run: curl -fsSL -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+        env:
+          CI_SECRET: ${{ secrets.PORTAINER_WEBHOOK_SECRET }}
+          WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+        run: |
+          curl -fsSL -X POST \
+            -H "X-CI-Secret: ${CI_SECRET}" \
+            "${WEBHOOK_URL}"

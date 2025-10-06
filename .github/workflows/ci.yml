@@ -6,12 +6,17 @@ on:
     paths:
       - 'backend/**'
       - 'frontend/**'
+      - 'docker-compose*.yml'
+      - 'compose*.yml'
       - '.github/workflows/**'
   pull_request:
     paths:
       - 'backend/**'
       - 'frontend/**'
+      - 'docker-compose*.yml'
+      - 'compose*.yml'
       - '.github/workflows/**'
+
 
 concurrency:
   group: ci-${{ github.ref }}
