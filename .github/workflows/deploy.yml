@@ -30,7 +30,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }} # or: ${{ secrets.GHCR_PAT }}
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Docker metadata
         id: meta
