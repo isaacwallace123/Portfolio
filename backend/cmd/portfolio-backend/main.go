@@ -9,6 +9,7 @@ import (
 	"github.com/isaacwallace123/Portfolio/backend/internal/adapters/prom"
 	"github.com/isaacwallace123/Portfolio/backend/internal/adapters/proxmox"
 
+	"github.com/isaacwallace123/Portfolio/backend/api/health"
 	"github.com/isaacwallace123/Portfolio/backend/api/topology"
 
 	"github.com/isaacwallace123/Portfolio/backend/internal/config"
@@ -23,11 +24,11 @@ func main() {
 
 	topRepo := topology.NewRepository(cfg, dck, prox)
 	topSvc := topology.NewService(topRepo)
-	topCtl := topology.NewTopologyController(topSvc)
 
 	router := app.NewRouter()
 	router.RegisterControllers(
-		topCtl,
+		topology.NewTopologyController(topSvc),
+		&health.HealthController{},
 	)
 
 	app.UseAfter(middlewares.LoggingPost)
