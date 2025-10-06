@@ -1,5 +1,11 @@
 import axiosInstance from '@/shared/api/axiosInstance';
 
+const PATH = '/api/v1/metrics/live';
+
 export function getMetricsStreamUrl(): string {
-  return `${axiosInstance.getUri()}api/v1/metrics/live`;
+  const base =
+    (axiosInstance.defaults?.baseURL as string | undefined)?.trim() ||
+    window.location.origin;
+
+  return new URL(PATH, base).toString();
 }
