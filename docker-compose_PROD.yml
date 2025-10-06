@@ -6,6 +6,7 @@ networks:
 
 services:
   portfolio-backend:
+    container_name: portfolio-frontend
     image: ghcr.io/isaacwallace123/portfolio-backend:latest
     restart: unless-stopped
     networks: [web]
@@ -24,6 +25,7 @@ services:
 
 
   portfolio-frontend:
+    container_name: portfolio-backend
     image: ghcr.io/isaacwallace123/portfolio-frontend:latest
     restart: unless-stopped
     networks: [web]
