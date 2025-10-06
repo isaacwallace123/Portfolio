@@ -48,43 +48,23 @@ jobs:
         working-directory: frontend
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'yarn'
+          cache-dependency-path: 'frontend/yarn.lock'
 
       - name: Enable Corepack (Yarn/Pnpm managers)
         run: corepack enable
 
-      - name: Install dependencies (Yarn/npm/pnpm)
-        run: |
-          if [ -f yarn.lock ]; then
-            yarn install --frozen-lockfile
-          elif [ -f package-lock.json ]; then
-            npm ci
-          elif [ -f pnpm-lock.yaml ]; then
-            corepack prepare pnpm@latest --activate
-            pnpm install --frozen-lockfile
-          else
-            echo "No lockfile found; running a generic install"
-            npm install
-          fi
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Build
-        run: |
-          if [ -f yarn.lock ]; then
-            yarn build
-          elif [ -f package.json ]; then
-            # npm or pnpm
-            if [ -f pnpm-lock.yaml ]; then
-              pnpm build
-            else
-              npm run build
-            fi
-          fi
+        run: yarn build
 
       - name: Upload dist (if present)
         if: ${{ hashFiles('frontend/dist/**') != '' }}
@@ -92,3 +72,4 @@ jobs:
         with:
           name: frontend-dist
           path: frontend/dist
+
