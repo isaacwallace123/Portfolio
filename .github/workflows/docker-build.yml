@@ -1,0 +1,28 @@
+name: Docker build
+
+on:
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'docker-compose*.yml'
+      - '.github/workflows/**'
+  pull_request:
+
+jobs:
+  build-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/backend:sha-${{ github.sha }} ./backend
+
+      - name: Build frontend image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/frontend:sha-${{ github.sha }} ./frontend

@@ -1,0 +1,94 @@
+name: CI (backend & frontend)
+
+on:
+  push:
+    branches: [ master, main, develop, feature/**, bug/** ]
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-build:
+    name: Backend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+          cache: true
+
+      - name: Go mod download
+        run: go mod download
+
+      - name: Build (all packages)
+        run: go build ./...
+
+  frontend-build:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Enable Corepack (Yarn/Pnpm managers)
+        run: corepack enable
+
+      - name: Install dependencies (Yarn/npm/pnpm)
+        run: |
+          if [ -f yarn.lock ]; then
+            yarn install --frozen-lockfile
+          elif [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f pnpm-lock.yaml ]; then
+            corepack prepare pnpm@latest --activate
+            pnpm install --frozen-lockfile
+          else
+            echo "No lockfile found; running a generic install"
+            npm install
+          fi
+
+      - name: Build
+        run: |
+          if [ -f yarn.lock ]; then
+            yarn build
+          elif [ -f package.json ]; then
+            # npm or pnpm
+            if [ -f pnpm-lock.yaml ]; then
+              pnpm build
+            else
+              npm run build
+            fi
+          fi
+
+      - name: Upload dist (if present)
+        if: ${{ hashFiles('frontend/dist/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
