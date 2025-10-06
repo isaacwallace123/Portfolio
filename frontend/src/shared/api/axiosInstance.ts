@@ -19,7 +19,8 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 const createAxiosInstance = (): AxiosInstance => {
-  const raw = import.meta.env.VITE_BACKEND_URL?.trim();
+  const raw =
+    import.meta.env.VITE_BACKEND_URL?.trim() || 'https://api.isaacwallace.dev';
   if (!raw) {
     throw new Error(
       '[CONFIG] VITE_BACKEND_URL is missing. Set it at build time (e.g. https://api.isaacwallace.dev).'
