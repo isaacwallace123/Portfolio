@@ -25,7 +25,6 @@ services:
       API_KEY: ${API_KEY}
     volumes:
       - /mnt/user/appdata/portfolio/backend/config.yaml:/app/config.yaml:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
       interval: 20s
