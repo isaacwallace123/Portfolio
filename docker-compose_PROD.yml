@@ -37,9 +37,6 @@ services:
     image: ghcr.io/isaacwallace123/portfolio-frontend:latest
     restart: unless-stopped
     networks: [web]
-    build:
-      args:
-        VITE_BACKEND_URL: ${VITE_BACKEND_URL}
     expose:
       - "3000"
     environment:
