@@ -25,8 +25,8 @@ const createAxiosInstance = (): AxiosInstance => {
 
   instance.interceptors.request.use(
     (config: CustomAxiosRequestConfig) => {
-      const useV2 = config.useV2 !== undefined ? config.useV2 : true;
-      const versionPath = useV2 ? '/v2/gateway' : '/v1/gateway';
+      const useV2 = config.useV2 !== undefined ? config.useV2 : false;
+      const versionPath = useV2 ? '/api/v2' : '/api/v1';
 
       if (
         config.url &&

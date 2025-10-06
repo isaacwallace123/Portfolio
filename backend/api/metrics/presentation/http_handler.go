@@ -17,12 +17,12 @@ type HTTPHandler struct {
 func NewHTTPHandler(s business.Service) *HTTPHandler { return &HTTPHandler{svc: s} }
 
 func (h *HTTPHandler) Register(mux *http.ServeMux) {
-	mux.HandleFunc("/api/v1/metrics/live", h.getLive)
-	mux.HandleFunc("/api/v1/metrics/range", h.getRange)
-	mux.HandleFunc("/api/v1/metrics/live/stream", h.streamLive)
+	mux.HandleFunc("/api/v1/metrics/current", h.getCurrent)
+	mux.HandleFunc("/api/v1/metrics/history", h.getHistory)
+	mux.HandleFunc("/api/v1/metrics/live", h.streamLive)
 }
 
-func (h *HTTPHandler) getLive(w http.ResponseWriter, r *http.Request) {
+func (h *HTTPHandler) getCurrent(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 
@@ -40,7 +40,7 @@ func (h *HTTPHandler) getLive(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(data)
 }
 
-func (h *HTTPHandler) getRange(w http.ResponseWriter, r *http.Request) {
+func (h *HTTPHandler) getHistory(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 		return

@@ -12,6 +12,7 @@ export {
   CardHeader,
   CardTitle,
 } from './card/card';
+export { Input } from './input/input';
 export { Separator } from './seperator/seperator';
 
 // Globe Component Export \\

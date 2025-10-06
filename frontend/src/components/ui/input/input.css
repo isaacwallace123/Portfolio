@@ -1,0 +1,132 @@
+@reference "../../../index.css";
+
+@layer components {
+  .ui-input {
+    --input-radius: 12px;
+    --tone: rgb(var(--color-brand));
+    --input-pad-x: 0.75rem;
+    --input-pad-y: 0.5rem;
+    --input-bg: transparent;
+    --input-fg: rgb(var(--color-foreground));
+    --input-border: color-mix(in oklab, var(--tone) 18%, transparent);
+
+    --focus-scale: 1.015;
+    --focus-duration: 240ms;
+    --focus-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .ui-input {
+    @apply relative inline-grid items-center gap-2
+           [grid-template-columns:auto_1fr_auto]
+           w-max rounded-[var(--input-radius)]
+           border bg-[var(--input-bg)] text-[color:var(--input-fg)]
+           px-[var(--input-pad-x)] py-[var(--input-pad-y)]
+           transform transition
+           duration-[var(--focus-duration)] ease-[var(--focus-ease)];
+    border-color: var(--input-border);
+  }
+
+  .ui-input--block {
+    @apply w-full;
+  }
+
+  .ui-input--sm {
+    @apply text-[0.85rem];
+  }
+  .ui-input--sm {
+    --input-pad-y: 0.4rem;
+  }
+
+  .ui-input--md {
+    @apply text-[0.95rem];
+  }
+
+  .ui-input--lg {
+    @apply text-[1.05rem];
+  }
+  .ui-input--lg {
+    --input-pad-y: 0.65rem;
+  }
+
+  .ui-input__field {
+    @apply w-full min-w-0 bg-transparent border-0 text-inherit leading-[1.25] p-0 outline-none;
+  }
+  .ui-input__field::placeholder {
+    color: color-mix(in oklab, var(--input-fg) 60%, transparent);
+  }
+
+  .ui-input:hover {
+    border-color: color-mix(in oklab, var(--tone) 30%, transparent);
+    background: color-mix(in oklab, var(--input-bg) 94%, var(--tone) 6%);
+  }
+
+  .ui-input:focus-within {
+    transform: scale(var(--focus-scale));
+    border-color: color-mix(in oklab, var(--tone) 45%, transparent);
+    background: color-mix(in oklab, var(--input-bg) 88%, var(--tone) 8%);
+  }
+
+  .ui-input::after {
+    content: '';
+    @apply absolute inset-[-1px] rounded-[inherit] pointer-events-none;
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--tone) 35%, transparent);
+    opacity: 0;
+    transition:
+      opacity var(--focus-duration) var(--focus-ease),
+      box-shadow var(--focus-duration) var(--focus-ease);
+  }
+
+  .ui-input:focus-within::after {
+    opacity: 1;
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--tone) 22%, transparent);
+  }
+
+  .ui-input__start,
+  .ui-input__end {
+    @apply inline-flex items-center;
+    color: color-mix(in oklab, var(--input-fg) 80%, transparent);
+  }
+
+  .ui-input--outline {
+    --input-bg: transparent;
+  }
+
+  .ui-input--subtle {
+    --input-bg: color-mix(in oklab, var(--tone) 10%, transparent);
+    --input-border: color-mix(in oklab, var(--tone) 22%, transparent);
+  }
+
+  .ui-input--solid {
+    --input-bg: color-mix(in oklab, var(--tone) 70%, #0b0b0b 30%);
+    --input-fg: #fff;
+    --input-border: color-mix(in oklab, var(--tone) 70%, transparent);
+  }
+
+  .ui-input--glass {
+    --input-bg: color-mix(
+      in oklab,
+      rgb(var(--color-foreground)) 14%,
+      transparent
+    );
+    --input-border: color-mix(
+      in oklab,
+      rgb(var(--color-foreground)) 26%,
+      transparent
+    );
+    @apply backdrop-blur-sm;
+  }
+
+  .ui-input--invalid {
+    --tone: rgb(var(--color-destructive));
+    --input-border: color-mix(in oklab, var(--tone) 55%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ui-input {
+      @apply transition-none;
+    }
+    .ui-input::after {
+      transition: none;
+    }
+  }
+}

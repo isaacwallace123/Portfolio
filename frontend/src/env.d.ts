@@ -8,4 +8,5 @@ interface ImportMetaEnv {
   readonly VITE_INSTAGRAM?: string;
   readonly VITE_CONTACT_FORM_URL?: string;
   readonly VITE_TITLE_TEMPLATE?: string;
+  readonly VITE_BACKEND_URL?: string;
 }

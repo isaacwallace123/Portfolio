@@ -3,6 +3,7 @@ package httputil
 import (
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -14,21 +15,21 @@ type CORSConfig struct {
 }
 
 func CORSMiddleware(cfg CORSConfig) func(http.Handler) http.Handler {
-	allow := func(arr []string) string {
-		if len(arr) == 0 {
-			return "*"
-		}
-		out := arr[0]
-		for i := 1; i < len(arr); i++ {
-			out += ", " + arr[i]
-		}
-		return out
-	}
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Access-Control-Allow-Origin", allow(cfg.AllowedOrigins))
-			w.Header().Set("Access-Control-Allow-Methods", allow(cfg.AllowedMethods))
-			w.Header().Set("Access-Control-Allow-Headers", allow(cfg.AllowedHeaders))
+			origin := r.Header.Get("Origin")
+
+			if origin != "" && containsOrigin(cfg.AllowedOrigins, origin) {
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Add("Vary", "Origin")
+			}
+
+			if len(cfg.AllowedMethods) > 0 {
+				w.Header().Set("Access-Control-Allow-Methods", strings.Join(cfg.AllowedMethods, ", "))
+			}
+			if len(cfg.AllowedHeaders) > 0 {
+				w.Header().Set("Access-Control-Allow-Headers", strings.Join(cfg.AllowedHeaders, ", "))
+			}
 
 			if cfg.AllowCredentials {
 				w.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -44,12 +45,19 @@ func CORSMiddleware(cfg CORSConfig) func(http.Handler) http.Handler {
 	}
 }
 
+func containsOrigin(allowed []string, origin string) bool {
+	for _, o := range allowed {
+		if o == "*" || o == origin {
+			return true
+		}
+	}
+	return false
+}
+
 func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-
 		next.ServeHTTP(w, r)
-
 		log.Printf("%s %s %s", r.Method, r.URL.Path, time.Since(start))
 	})
 }

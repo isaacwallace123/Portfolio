@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
-import * as React from 'react';
+import type { HTMLAttributes } from 'react';
 
-type Props = React.HTMLAttributes<HTMLHRElement> & { decorative?: boolean };
+type Props = HTMLAttributes<HTMLHRElement> & { decorative?: boolean };
 
 export function Separator({ className, decorative = true, ...props }: Props) {
   return (
