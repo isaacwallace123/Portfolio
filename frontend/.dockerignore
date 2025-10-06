@@ -1,0 +1,10 @@
+node_modules
+dist
+.build
+.next
+.yarn/cache
+.yarn/unplugged
+.yarn/install-state.gz
+.pnp.*
+.git
+.DS_Store

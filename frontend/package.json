@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "shadcn": "shadcn",
+    "typecheck": "tsc -b --pretty",
     "build:icons": "tsx scripts/build-icons.ts"
   },
   "dependencies": {
