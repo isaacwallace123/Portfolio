@@ -38,7 +38,6 @@ services:
     restart: unless-stopped
     networks: [web]
     build:
-      context: .
       args:
         VITE_BACKEND_URL: ${VITE_BACKEND_URL}
     expose:
