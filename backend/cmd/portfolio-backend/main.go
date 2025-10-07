@@ -33,7 +33,7 @@ func main() {
 
 	handler := httputil.LoggingMiddleware(
 		httputil.CORSMiddleware(httputil.CORSConfig{
-			AllowedOrigins:   []string{"http://localhost:5173", "https://*.isaacwallace.dev", "https://api.isaacwallace.dev"},
+			AllowedOrigins:   []string{"https://isaacwallace.dev", "http://localhost:5173"},
 			AllowedMethods:   []string{"GET", "OPTIONS"},
 			AllowedHeaders:   []string{"Content-Type"},
 			AllowCredentials: false,
